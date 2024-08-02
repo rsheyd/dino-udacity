@@ -9,7 +9,15 @@ function Dino(species, weight, height, diet, where, when, facts) {
     this.facts = facts;
 }
 
-// Create Human Object
+// Fetch Dino Data, Create Dino Objects, initialize button click event listener
+fetch('dino.json')
+    .then(response => response.json())
+    .then(data => {
+        const dinoObjects = data.Dinos.map(dino => new Dino(dino.species, dino.weight, dino.height, dino.diet, dino.where, dino.when, [dino.fact]));
+        initializeEventListener(dinoObjects);
+    });
+
+// Create Human Constructor
 function Human(name, height, weight, diet) {
     this.species = 'Human';
     this.name = name;
@@ -18,26 +26,20 @@ function Human(name, height, weight, diet) {
     this.diet = diet;
 }
 
-// Fetch Dino Data and Create Dino Objects
-fetch('dino.json')
-    .then(response => response.json())
-    .then(data => {
-        const dinoObjects = data.Dinos.map(dino => new Dino(dino.species, dino.weight, dino.height, dino.diet, dino.where, dino.when, [dino.fact]));
-        setup(dinoObjects);
-    });
-
-// Use IIFE to get human data from form
-function setup(dinoObjects) {
+// Use IIFE to get human data from form and generate inforgraphic
+function initializeEventListener(dinoObjects) {
     document.getElementById('btn').addEventListener('click', function() {
-        const name = document.getElementById('name').value;
-        const feet = document.getElementById('feet').value;
-        const inches = document.getElementById('inches').value;
-        const weight = document.getElementById('weight').value;
-        const diet = document.getElementById('diet').value;
+        (function() {
+            const name = document.getElementById('name').value;
+            const feet = document.getElementById('feet').value;
+            const inches = document.getElementById('inches').value;
+            const weight = document.getElementById('weight').value;
+            const diet = document.getElementById('diet').value;
 
-        const human = new Human(name, parseInt(feet) * 12 + parseInt(inches), weight, diet);
+            const human = new Human(name, parseInt(feet) * 12 + parseInt(inches), weight, diet);
 
-        generateInfographic(human, dinoObjects);
+            generateInfographic(human, dinoObjects);
+        })();
     });
 }
 
@@ -59,15 +61,8 @@ Dino.prototype.compareDiet = function(humanDiet) {
 // Generate Tiles for each Dino in Array
 function generateInfographic(human, dinoObjects) {
     const grid = document.getElementById('grid');
-    grid.innerHTML = '';  // Clear any existing content
-
-    // Create Dino tiles (with the human tile at the center)
     const tiles = dinoObjects.map(dino => createTile(dino, human));
-
-    // Insert human tile in the center (4th position)
     tiles.splice(4, 0, createTile(human));
-
-    // Append tiles to the grid
     tiles.forEach(tile => grid.appendChild(tile));
 
     // Remove form from screen
