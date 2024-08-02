@@ -1,0 +1,16 @@
+{
+  "name": "dino-udacity",
+  "version": "1.0.0",
+  "description": "udacity project for intermediate javascript course 2",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@eslint/js": "^9.8.0",
+    "eslint": "^9.8.0",
+    "globals": "^15.9.0"
+  }
+}
