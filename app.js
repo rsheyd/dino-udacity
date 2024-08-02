@@ -13,7 +13,7 @@ function Dino(species, weight, height, diet, where, when, facts) {
 fetch('dino.json')
     .then(response => response.json())
     .then(data => {
-        const dinoObjects = data.Dinos.map(dino => new Dino(dino.species, dino.weight, dino.height, dino.diet, dino.where, dino.when, [dino.fact]));
+        const dinoObjects = data.Dinos.map(dino => new Dino(dino.species, dino.weight, dino.height, dino.diet, dino.where, dino.when, dino.facts));
         initializeEventListener(dinoObjects);
     });
 
@@ -34,7 +34,7 @@ function initializeEventListener(dinoObjects) {
             const feet = document.getElementById('feet').value;
             const inches = document.getElementById('inches').value;
             const weight = document.getElementById('weight').value;
-            const diet = document.getElementById('diet').value;
+            const diet = document.getElementById('diet').value.toLowerCase();
 
             const human = new Human(name, parseInt(feet) * 12 + parseInt(inches), weight, diet);
 
@@ -84,10 +84,16 @@ function createTile(creature, human = null) {
 
     if (creature.species !== 'Human') {
         const fact = document.createElement('p');
+        const facts = [];
+        facts.push(...creature.facts);
+        facts.push(creature.compareWeight(human.weight));
+        facts.push(creature.compareHeight(human.height));
+        facts.push(creature.compareDiet(human.diet));
+
         if (creature.species === 'Pigeon') {
             fact.innerText = creature.facts[0];
         } else {
-            const randomFact = creature.facts[Math.floor(Math.random() * creature.facts.length)];
+            const randomFact = facts[Math.floor(Math.random() * facts.length)];
             fact.innerText = randomFact;
         }
         tile.appendChild(fact);
