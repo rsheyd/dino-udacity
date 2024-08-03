@@ -47,6 +47,12 @@ function initializeEventListener(dinoObjects) {
       const weight = document.getElementById("weight").value;
       const diet = document.getElementById("diet").value.toLowerCase();
 
+      // Validation
+      if (!name || !feet || !inches || !weight || !diet) {
+      alert("Please fill in all fields.");
+      return;
+      }
+
       const human = new Human(
         name,
         parseInt(feet) * 12 + parseInt(inches),
